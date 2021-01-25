@@ -3,12 +3,15 @@ package com.dodo.gobz.controller;
 import com.dodo.gobz.exception.NotImplementedException;
 import com.dodo.gobz.exception.ResourceAccessForbiddenException;
 import com.dodo.gobz.exception.ResourceNotFoundException;
+import com.dodo.gobz.mapper.ProjectMapper;
 import com.dodo.gobz.model.Project;
 import com.dodo.gobz.model.User;
 import com.dodo.gobz.model.common.MemberRole;
 import com.dodo.gobz.payload.request.ProjectCreationRequest;
 import com.dodo.gobz.payload.request.ProjectUpdateRequest;
 import com.dodo.gobz.payload.response.ApiResponse;
+import com.dodo.gobz.payload.dto.FullProjectDto;
+import com.dodo.gobz.payload.dto.ProjectDto;
 import com.dodo.gobz.repository.ProjectRepository;
 import com.dodo.gobz.security.CurrentUser;
 import com.dodo.gobz.security.UserPrincipal;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,20 +46,20 @@ public class ProjectController {
 
     private final ProjectRepository projectRepository;
 
+    private final ProjectMapper projectMapper;
+
     @GetMapping("/projects")
-    public List<Project> getProjects(@CurrentUser UserPrincipal userPrincipal) {
+    public List<ProjectDto> getProjects(@CurrentUser UserPrincipal userPrincipal) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
 
-        return projectService.getAllProjects(user);
-    }
-
-    @GetMapping("/projects/mine")
-    public List<Project> getMyProjects(@CurrentUser UserPrincipal userPrincipal) {
-        throw new NotImplementedException();
+        return projectService.getAllProjects(user)
+                .stream()
+                .map(projectMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/projects/{projectId}")
-    public Project getProjectById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
+    public ProjectDto getProjectById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
 
         final Project project = projectRepository.findById(projectId)
@@ -65,13 +69,27 @@ public class ProjectController {
             throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.VIEWER));
         }
 
-        return project;
+        return projectMapper.mapToDto(project);
+    }
+
+    @GetMapping("/projects/{projectId}/full")
+    public FullProjectDto getFullProjectById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
+        final User user = userService.getUserFromPrincipal(userPrincipal);
+
+        final Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
+
+        if (!project.isShared() && !projectService.userHasRequiredRole(project, user, MemberRole.VIEWER)) {
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.VIEWER));
+        }
+
+        return projectMapper.mapToFullDto(project);
     }
 
     @PostMapping("/projects")
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
-    public Project createProject(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody ProjectCreationRequest request) {
+    public ProjectDto createProject(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody ProjectCreationRequest request) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
 
         Project project = Project.builder()
@@ -85,12 +103,12 @@ public class ProjectController {
 
         projectService.addMember(project, user, MemberRole.OWNER);
 
-        return project;
+        return projectMapper.mapToDto(project);
     }
 
     @PutMapping("/projects/{projectId}")
     @Transactional
-    public Project updateProject(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody ProjectUpdateRequest request, @PathVariable long projectId) {
+    public ProjectDto updateProject(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody ProjectUpdateRequest request, @PathVariable long projectId) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
 
         final Project project = projectRepository.findById(projectId)
@@ -102,8 +120,9 @@ public class ProjectController {
 
         project.setName(request.getName());
         project.setDescription(request.getDescription());
+        project.setShared(request.getShared());
 
-        return projectRepository.save(project);
+        return projectMapper.mapToDto(projectRepository.save(project));
     }
 
     @DeleteMapping("/projects/{projectId}")

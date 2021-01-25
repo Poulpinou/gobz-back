@@ -24,8 +24,8 @@ spring:
               - profile
 app:
   auth:
-    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-    tokenExpirationMsec: 864000000
+    tokenSecret: ${TOKEN_SECRET}
+    tokenExpirationMsec: ${TOKEN_EXPIRATION_IN_MS}
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth2/redirect
