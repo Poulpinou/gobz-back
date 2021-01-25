@@ -10,7 +10,9 @@ import com.dodo.gobz.repository.ProjectMemberRepository;
 import com.dodo.gobz.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,6 +43,7 @@ public class ProjectService {
         return projectMember.getRole().getRolePower() >= role.getRolePower();
     }
 
+    @Transactional
     public void addMember(Project project, User member, MemberRole role) {
         if (userIsProjectMember(project, member)) {
             throw new AlreadyAProjectMemberException(project, member);
@@ -53,5 +56,9 @@ public class ProjectService {
                 .build();
 
         projectMemberRepository.save(newMember);
+    }
+
+    public List<Project> getAllProjects(User user){
+        return projectRepository.getProjectsByUserId(user.getId());
     }
 }
