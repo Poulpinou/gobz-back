@@ -11,7 +11,7 @@
 	<groupId>com.dodo</groupId>
 	<artifactId>gobz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gobz-back</name>
+	<name>gobz-api</name>
 	<description>Backend for Gobz</description>
 
 	<properties>

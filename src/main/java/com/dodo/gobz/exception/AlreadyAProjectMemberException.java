@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class AlreadyAProjectMemberException extends RuntimeException {
-    public AlreadyAProjectMemberException(Project project, User user){
+    public AlreadyAProjectMemberException(Project project, User user) {
         super(String.format("User %s is already a member of Project %s", user.getId(), project.getId()));
     }
 }

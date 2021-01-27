@@ -11,4 +11,5 @@ public class FullProjectDto {
     private String description;
     private boolean shared;
     private List<ProjectMemberDto> members;
+    private List<ChapterDto> chapters;
 }

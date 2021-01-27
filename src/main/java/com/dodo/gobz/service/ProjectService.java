@@ -2,6 +2,7 @@ package com.dodo.gobz.service;
 
 import com.dodo.gobz.exception.AlreadyAProjectMemberException;
 import com.dodo.gobz.exception.ResourceAccessForbiddenException;
+import com.dodo.gobz.exception.ResourceNotFoundException;
 import com.dodo.gobz.model.Project;
 import com.dodo.gobz.model.ProjectMember;
 import com.dodo.gobz.model.User;
@@ -58,7 +59,18 @@ public class ProjectService {
         projectMemberRepository.save(newMember);
     }
 
-    public List<Project> getAllProjects(User user){
+    public List<Project> getAllProjects(User user) {
         return projectRepository.getProjectsByUserId(user.getId());
+    }
+
+    public Project getProjectByIdIfAuthorized(long projectId, User user) {
+        final Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
+
+        if (!project.isShared() && !userHasRequiredRole(project, user, MemberRole.VIEWER)) {
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.VIEWER));
+        }
+
+        return project;
     }
 }

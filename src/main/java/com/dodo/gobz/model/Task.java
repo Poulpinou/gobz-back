@@ -32,10 +32,7 @@ public class Task {
     private Step step;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column
-    private String description;
+    private String text;
 
     @Column(nullable = false)
     private boolean isDone = false;
