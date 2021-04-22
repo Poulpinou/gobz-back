@@ -108,12 +108,12 @@ public class ProjectController {
                 .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
 
         if (!projectService.userHasRequiredRole(project, user, MemberRole.OWNER)) {
-            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to update this project", MemberRole.CONTRIBUTOR));
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to update this project", MemberRole.OWNER));
         }
 
         project.setName(request.getName());
         project.setDescription(request.getDescription());
-        project.setShared(request.getShared());
+        project.setShared(request.isShared());
 
         return projectMapper.mapToDto(projectRepository.save(project));
     }

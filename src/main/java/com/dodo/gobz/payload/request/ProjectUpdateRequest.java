@@ -11,5 +11,5 @@ public class ProjectUpdateRequest {
 
     private String description;
 
-    private Boolean shared;
+    private boolean shared;
 }
