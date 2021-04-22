@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +36,6 @@ public class Chapter {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "chapter")
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     private List<Step> steps;
 }

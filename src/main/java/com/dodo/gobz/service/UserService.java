@@ -13,7 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getUserFromPrincipal(UserPrincipal userPrincipal){
+    public User getUserFromPrincipal(UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userPrincipal.getId()));
     }

@@ -1,17 +1,16 @@
 package com.dodo.gobz.controller;
 
-import com.dodo.gobz.exception.NotImplementedException;
 import com.dodo.gobz.exception.ResourceAccessForbiddenException;
 import com.dodo.gobz.exception.ResourceNotFoundException;
 import com.dodo.gobz.mapper.ProjectMapper;
 import com.dodo.gobz.model.Project;
 import com.dodo.gobz.model.User;
 import com.dodo.gobz.model.common.MemberRole;
+import com.dodo.gobz.payload.dto.FullProjectDto;
+import com.dodo.gobz.payload.dto.ProjectDto;
 import com.dodo.gobz.payload.request.ProjectCreationRequest;
 import com.dodo.gobz.payload.request.ProjectUpdateRequest;
 import com.dodo.gobz.payload.response.ApiResponse;
-import com.dodo.gobz.payload.dto.FullProjectDto;
-import com.dodo.gobz.payload.dto.ProjectDto;
 import com.dodo.gobz.repository.ProjectRepository;
 import com.dodo.gobz.security.CurrentUser;
 import com.dodo.gobz.security.UserPrincipal;
@@ -61,13 +60,7 @@ public class ProjectController {
     @GetMapping("/projects/{projectId}")
     public ProjectDto getProjectById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
-
-        final Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
-
-        if (!project.isShared() && !projectService.userHasRequiredRole(project, user, MemberRole.VIEWER)) {
-            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.VIEWER));
-        }
+        final Project project = projectService.getProjectByIdIfAuthorized(projectId, user);
 
         return projectMapper.mapToDto(project);
     }
@@ -114,27 +107,27 @@ public class ProjectController {
         final Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
 
-        if (!projectService.userHasRequiredRole(project, user, MemberRole.CONTRIBUTOR)) {
-            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.CONTRIBUTOR));
+        if (!projectService.userHasRequiredRole(project, user, MemberRole.OWNER)) {
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to update this project", MemberRole.OWNER));
         }
 
         project.setName(request.getName());
         project.setDescription(request.getDescription());
-        project.setShared(request.getShared());
+        project.setShared(request.isShared());
 
         return projectMapper.mapToDto(projectRepository.save(project));
     }
 
     @DeleteMapping("/projects/{projectId}")
     @Transactional
-    public ResponseEntity<?> deleteProject(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
+    public ResponseEntity<ApiResponse> deleteProject(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
 
         final Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
 
         if (!projectService.userHasRequiredRole(project, user, MemberRole.OWNER)) {
-            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.OWNER));
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to delete this project", MemberRole.OWNER));
         }
 
         projectRepository.delete(project);

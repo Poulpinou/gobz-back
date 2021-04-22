@@ -1,15 +1,14 @@
 package com.dodo.gobz.payload.request;
 
+import com.dodo.gobz.model.common.TaskType;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class ProjectUpdateRequest {
+public class TaskCreationRequest {
     @NotBlank
-    private String name;
+    private String text;
 
-    private String description;
-
-    private boolean shared;
+    private TaskType type;
 }

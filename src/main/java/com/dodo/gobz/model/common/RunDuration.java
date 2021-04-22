@@ -1,6 +1,6 @@
 package com.dodo.gobz.model.common;
 
-public enum  RunDuration {
+public enum RunDuration {
     WEEK,
     HALF,
     MONTH
