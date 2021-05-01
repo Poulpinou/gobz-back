@@ -1,8 +1,8 @@
 package com.dodo.gobz.security;
 
-import com.dodo.gobz.config.AppConfig;
-import com.dodo.gobz.exception.BadRequestException;
-import com.dodo.gobz.util.CookieUtils;
+import com.dodo.gobz.configs.AppConfig;
+import com.dodo.gobz.exceptions.BadRequestException;
+import com.dodo.gobz.utils.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
