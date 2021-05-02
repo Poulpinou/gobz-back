@@ -1,6 +1,6 @@
 package com.dodo.gobz.security;
 
-import com.dodo.gobz.config.AppConfig;
+import com.dodo.gobz.configs.AppConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

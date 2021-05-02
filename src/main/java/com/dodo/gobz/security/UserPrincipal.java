@@ -1,6 +1,6 @@
 package com.dodo.gobz.security;
 
-import com.dodo.gobz.model.User;
+import com.dodo.gobz.models.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

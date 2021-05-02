@@ -1,8 +1,8 @@
 package com.dodo.gobz.security;
 
-import com.dodo.gobz.exception.ResourceNotFoundException;
-import com.dodo.gobz.model.User;
-import com.dodo.gobz.repository.UserRepository;
+import com.dodo.gobz.exceptions.ResourceNotFoundException;
+import com.dodo.gobz.models.User;
+import com.dodo.gobz.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
