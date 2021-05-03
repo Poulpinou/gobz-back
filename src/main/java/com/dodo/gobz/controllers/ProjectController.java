@@ -6,7 +6,9 @@ import com.dodo.gobz.mappers.ProjectMapper;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.User;
 import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.payloads.dto.ProgressInfosDto;
 import com.dodo.gobz.payloads.dto.ProjectDto;
+import com.dodo.gobz.payloads.dto.ProjectInfosDto;
 import com.dodo.gobz.payloads.requests.ProjectCreationRequest;
 import com.dodo.gobz.payloads.requests.ProjectUpdateRequest;
 import com.dodo.gobz.payloads.responses.ApiResponse;
@@ -64,10 +66,9 @@ public class ProjectController {
         return projectMapper.mapToDto(project);
     }
 
-    /*@GetMapping("/projects/{projectId}/full")
-    public FullProjectDto getFullProjectById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
+    @GetMapping("/projects/{projectId}/infos")
+    public ProjectInfosDto getProjectInfosById(@CurrentUser UserPrincipal userPrincipal, @PathVariable long projectId) {
         final User user = userService.getUserFromPrincipal(userPrincipal);
-
         final Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Project", "projectId", projectId));
 
@@ -75,8 +76,8 @@ public class ProjectController {
             throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read this project", MemberRole.VIEWER));
         }
 
-        return projectMapper.mapToFullDto(project);
-    }*/
+        return projectMapper.mapToInfosDto(project);
+    }
 
     @PostMapping("/projects")
     @ResponseStatus(HttpStatus.CREATED)
