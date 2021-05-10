@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +60,23 @@ public class StepController {
         }
 
         return stepMapper.mapToDto(step);
+    }
+
+    @GetMapping("/chapters/{chapterId}/steps")
+    public List<StepDto> getChapterSteps(@CurrentUser UserPrincipal userPrincipal, @PathVariable long chapterId) {
+        final User user = userService.getUserFromPrincipal(userPrincipal);
+        final Chapter chapter = chapterRepository.findById(chapterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Chapter", "chapterId", chapterId));
+        final Project project = chapter.getProject();
+
+        if (!projectService.userHasRequiredRole(project, user, MemberRole.VIEWER)) {
+            throw new ResourceAccessForbiddenException("Project", String.format("user should at least have the %s role to read steps for this project", MemberRole.VIEWER));
+        }
+
+        return chapter.getSteps()
+                .stream()
+                .map(stepMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/chapters/{chapterId}/steps")
