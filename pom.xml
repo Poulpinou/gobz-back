@@ -8,11 +8,12 @@
 		<version>2.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.dodo</groupId>
 	<artifactId>gobz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gobz-api</name>
-	<description>Backend for Gobz</description>
+	<description>Backend for Gobz Application</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -91,7 +92,10 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.name}</finalName>
+
 		<plugins>
+			<!--Lombok-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
