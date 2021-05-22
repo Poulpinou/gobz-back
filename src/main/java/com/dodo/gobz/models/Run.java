@@ -1,8 +1,7 @@
 package com.dodo.gobz.models;
 
-import com.dodo.gobz.models.common.RunDuration;
-import com.dodo.gobz.models.common.RunState;
-import com.sun.istack.NotNull;
+import com.dodo.gobz.models.audits.Auditable;
+import com.dodo.gobz.models.common.RunStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,9 +14,13 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,28 +28,47 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "runs")
-public class Run {
+public class Run extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Project project;
+    private User user;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne
+    private Step step;
+
+    @ManyToMany
+    @JoinTable(
+            name = "run_tasks",
+            joinColumns = @JoinColumn(name = "run_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private List<Task> tasks;
 
     @Column
-    private String description;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
-    private RunState state;
+    private RunStatus status;
 
     @Column
-    private Date startDate;
+    private LocalDate limitDate;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private RunDuration duration;
+    public boolean hasLimitDate() {
+        return limitDate != null;
+    }
+
+
+    public double getCompletion() {
+        final List<Task> tasks = this.tasks;
+        if (tasks.isEmpty()) {
+            return 1;
+        }
+
+        final double doneCount = tasks.stream()
+                .mapToInt(task -> task.isDone() ? 1 : 0)
+                .sum();
+
+        return doneCount / tasks.size();
+    }
 }

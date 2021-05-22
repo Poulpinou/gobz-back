@@ -40,15 +40,19 @@ public class Step extends Auditable {
     @OneToMany(mappedBy = "step", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
+    @OneToMany(mappedBy = "step", cascade = CascadeType.REMOVE)
+    private List<Run> runs;
+
     public double getCompletion() {
         final List<Task> tasks = this.tasks;
-        if(tasks.isEmpty()){
+        if (tasks.isEmpty()) {
             return 0;
         }
 
-        final int count = tasks.size();
-        final double doneCount = tasks.stream().mapToInt(task -> task.isDone() ? 1 : 0).sum();
+        final double doneCount = tasks.stream()
+                .mapToInt(task -> task.isDone() ? 1 : 0)
+                .sum();
 
-        return doneCount / count;
+        return doneCount / tasks.size();
     }
 }

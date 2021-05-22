@@ -1,9 +1,7 @@
 package com.dodo.gobz.models.common;
 
-public enum RunState {
-    NEW,
-    READY,
-    SCHEDULED,
+public enum RunStatus {
     ACTIVE,
+    LATE,
     DONE
 }

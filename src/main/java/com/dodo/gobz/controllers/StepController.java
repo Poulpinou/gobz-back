@@ -59,7 +59,7 @@ public class StepController {
             throw new ResourceAccessForbiddenException("Step", String.format("user should at least have the %s role to read this step", MemberRole.VIEWER));
         }
 
-        return stepMapper.mapToDto(step);
+        return stepMapper.mapToDto(step, true);
     }
 
     @GetMapping("/chapters/{chapterId}/steps")
@@ -75,7 +75,7 @@ public class StepController {
 
         return chapter.getSteps()
                 .stream()
-                .map(stepMapper::mapToDto)
+                .map(step -> stepMapper.mapToDto(step, true))
                 .collect(Collectors.toList());
     }
 

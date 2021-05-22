@@ -20,14 +20,14 @@ public class ProjectMapper {
         return mapper.map(project, ProjectDto.class);
     }
 
-    public ProjectInfosDto mapToInfosDto(Project project){
+    public ProjectInfosDto mapToInfosDto(Project project) {
         return ProjectInfosDto.builder()
                 .project(mapToDto(project))
                 .progressInfos(mapToProgressInfosDto(project))
                 .build();
     }
 
-    private ProgressInfosDto mapToProgressInfosDto(Project project){
+    private ProgressInfosDto mapToProgressInfosDto(Project project) {
         final AtomicInteger chapterCount = new AtomicInteger();
         final AtomicInteger stepsCount = new AtomicInteger();
         final AtomicInteger tasksCount = new AtomicInteger();
@@ -42,7 +42,7 @@ public class ProjectMapper {
                                 step.getTasks()
                                         .forEach(task -> {
                                             tasksCount.getAndIncrement();
-                                            if(task.isDone()){
+                                            if (task.isDone()) {
                                                 doneTaskCount.getAndIncrement();
                                             }
                                         });

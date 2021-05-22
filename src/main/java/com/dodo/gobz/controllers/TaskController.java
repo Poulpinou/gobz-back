@@ -93,7 +93,6 @@ public class TaskController {
         final Task task = Task.builder()
                 .step(step)
                 .text(request.getText())
-                .type(request.getType())
                 .isDone(false)
                 .build();
 
@@ -113,7 +112,6 @@ public class TaskController {
         }
 
         task.setText(request.getText());
-        task.setType(request.getType());
 
         return taskMapper.mapToDto(taskRepository.save(task));
     }

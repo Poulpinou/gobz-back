@@ -3,7 +3,8 @@ package com.dodo.gobz.payloads.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Data
 public class ProjectDto {
@@ -12,6 +13,6 @@ public class ProjectDto {
     private String description;
     @JsonProperty("isShared")
     private boolean shared;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

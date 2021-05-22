@@ -52,7 +52,7 @@ public class ChapterController {
 
         return project.getChapters()
                 .stream()
-                .map(chapterMapper::mapToDto)
+                .map(chapter -> chapterMapper.mapToDto(chapter, true))
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +67,7 @@ public class ChapterController {
             throw new ResourceAccessForbiddenException("Chapter", String.format("user should at least have the %s role to read this chapter", MemberRole.VIEWER));
         }
 
-        return chapterMapper.mapToDto(chapter);
+        return chapterMapper.mapToDto(chapter, true);
     }
 
     @PostMapping("/projects/{projectId}/chapters")

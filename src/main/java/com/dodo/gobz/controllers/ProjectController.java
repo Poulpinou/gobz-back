@@ -6,7 +6,6 @@ import com.dodo.gobz.mappers.ProjectMapper;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.User;
 import com.dodo.gobz.models.common.MemberRole;
-import com.dodo.gobz.payloads.dto.ProgressInfosDto;
 import com.dodo.gobz.payloads.dto.ProjectDto;
 import com.dodo.gobz.payloads.dto.ProjectInfosDto;
 import com.dodo.gobz.payloads.requests.ProjectCreationRequest;

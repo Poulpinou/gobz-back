@@ -40,9 +40,9 @@ public class Chapter extends Auditable {
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     private List<Step> steps;
 
-    public double getCompletion(){
+    public double getCompletion() {
         final List<Step> steps = this.steps;
-        if(steps.isEmpty()){
+        if (steps.isEmpty()) {
             return 0;
         }
         return steps.stream().mapToDouble(Step::getCompletion).sum() / steps.size();
