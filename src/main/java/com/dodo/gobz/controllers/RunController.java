@@ -69,7 +69,7 @@ public class RunController {
     @PostMapping("/runs")
     @Transactional
     public RunDto createRun(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody RunCreationRequest request) {
-        final int activeRunsCount = runRepository.countRunsByActiveIsTrueAndMemberUserId(userPrincipal.getId());
+        final int activeRunsCount = runRepository.countByMemberUserIdAndStatusIn(userPrincipal.getId(), RunStatus.ACTIVE, RunStatus.LATE);
         if (activeRunsCount >= appConfig.getRun().getMaxActiveAmount()) {
             throw new BadRequestException("Can't create a new run: max active run amount has been reached");
         }

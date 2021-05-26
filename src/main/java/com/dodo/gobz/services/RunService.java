@@ -84,7 +84,7 @@ public class RunService {
                 .collect(Collectors.toList());
 
         if (tasks.isEmpty()) {
-            throw new BadRequestException("None of provided tasks exist int the step");
+            throw new BadRequestException("None of provided tasks can be added to the run");
         }
 
         final LocalDate limitDate;
