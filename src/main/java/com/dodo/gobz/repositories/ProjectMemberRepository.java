@@ -2,7 +2,7 @@ package com.dodo.gobz.repositories;
 
 import com.dodo.gobz.models.ProjectMember;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;

@@ -1,43 +1,39 @@
 package com.dodo.gobz.models;
 
-import com.dodo.gobz.models.common.RunTaskType;
-import com.dodo.gobz.models.keys.RunTaskKey;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
 
-@Data
-@Builder
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "run_tasks")
 public class RunTask {
-    @EmbeddedId
-    private RunTaskKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne(optional = false)
-    @MapsId("runId")
+    @ManyToOne
     @JoinColumn(name = "run_id")
     private Run run;
 
-    @ManyToOne(optional = false)
-    @MapsId("taskId")
+    @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private RunTaskType type;
+    @Column(nullable = false)
+    private boolean abandoned;
 }

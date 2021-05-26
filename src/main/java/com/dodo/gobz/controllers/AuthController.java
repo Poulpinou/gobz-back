@@ -2,7 +2,7 @@ package com.dodo.gobz.controllers;
 
 import com.dodo.gobz.exceptions.BadRequestException;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.AuthProvider;
+import com.dodo.gobz.models.enums.AuthProvider;
 import com.dodo.gobz.payloads.requests.LoginRequest;
 import com.dodo.gobz.payloads.requests.SignUpRequest;
 import com.dodo.gobz.payloads.responses.ApiResponse;
@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }

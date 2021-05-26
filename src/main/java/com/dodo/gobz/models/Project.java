@@ -42,7 +42,4 @@ public class Project extends Auditable {
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ProjectMember> members;
-
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Run> runs;
 }

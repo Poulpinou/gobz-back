@@ -4,7 +4,9 @@ import com.dodo.gobz.models.audits.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,13 +19,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "chapters")
-public class Chapter extends Auditable {
+public class Chapter extends Auditable implements ProjectElement, CompletableElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,11 +43,13 @@ public class Chapter extends Auditable {
     @OneToMany(mappedBy = "chapter", cascade = CascadeType.ALL)
     private List<Step> steps;
 
-    public double getCompletion(){
+    public float getCompletion() {
         final List<Step> steps = this.steps;
-        if(steps.isEmpty()){
+        if (steps.isEmpty()) {
             return 0;
         }
-        return steps.stream().mapToDouble(Step::getCompletion).sum() / steps.size();
+        return (float) (steps.stream()
+                .mapToDouble(Step::getCompletion)
+                .sum() / steps.size());
     }
 }

@@ -1,7 +1,7 @@
 package com.dodo.gobz.models;
 
 import com.dodo.gobz.models.audits.DateAuditable;
-import com.dodo.gobz.models.common.AuthProvider;
+import com.dodo.gobz.models.enums.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

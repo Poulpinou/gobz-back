@@ -6,7 +6,7 @@ import com.dodo.gobz.mappers.ChapterMapper;
 import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import com.dodo.gobz.payloads.dto.ChapterDto;
 import com.dodo.gobz.payloads.requests.ChapterCreationRequest;
 import com.dodo.gobz.payloads.requests.ChapterUpdateRequest;
@@ -52,7 +52,7 @@ public class ChapterController {
 
         return project.getChapters()
                 .stream()
-                .map(chapterMapper::mapToDto)
+                .map(chapter -> chapterMapper.mapToDto(chapter, true))
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +67,7 @@ public class ChapterController {
             throw new ResourceAccessForbiddenException("Chapter", String.format("user should at least have the %s role to read this chapter", MemberRole.VIEWER));
         }
 
-        return chapterMapper.mapToDto(chapter);
+        return chapterMapper.mapToDto(chapter, true);
     }
 
     @PostMapping("/projects/{projectId}/chapters")

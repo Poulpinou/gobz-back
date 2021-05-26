@@ -7,7 +7,7 @@ import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.Step;
 import com.dodo.gobz.models.Task;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import com.dodo.gobz.payloads.dto.TaskDto;
 import com.dodo.gobz.payloads.requests.TaskCreationRequest;
 import com.dodo.gobz.payloads.requests.TaskUpdateRequest;
@@ -17,6 +17,7 @@ import com.dodo.gobz.repositories.TaskRepository;
 import com.dodo.gobz.security.CurrentUser;
 import com.dodo.gobz.security.UserPrincipal;
 import com.dodo.gobz.services.ProjectService;
+import com.dodo.gobz.services.TaskService;
 import com.dodo.gobz.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,6 +43,7 @@ public class TaskController {
 
     private final ProjectService projectService;
     private final UserService userService;
+    private final TaskService taskService;
 
     private final StepRepository stepRepository;
     private final TaskRepository taskRepository;
@@ -58,7 +61,7 @@ public class TaskController {
             throw new ResourceAccessForbiddenException("Task", String.format("user should at least have the %s role to read this task", MemberRole.VIEWER));
         }
 
-        return taskMapper.mapToDto(task);
+        return taskMapper.mapToDto(task, true);
     }
 
     @GetMapping("/steps/{stepId}/tasks")
@@ -74,7 +77,7 @@ public class TaskController {
 
         return step.getTasks()
                 .stream()
-                .map(taskMapper::mapToDto)
+                .map(task -> taskMapper.mapToDto(task, true))
                 .collect(Collectors.toList());
     }
 
@@ -93,8 +96,7 @@ public class TaskController {
         final Task task = Task.builder()
                 .step(step)
                 .text(request.getText())
-                .type(request.getType())
-                .isDone(false)
+                .done(false)
                 .build();
 
         return taskMapper.mapToDto(taskRepository.save(task));
@@ -113,7 +115,6 @@ public class TaskController {
         }
 
         task.setText(request.getText());
-        task.setType(request.getType());
 
         return taskMapper.mapToDto(taskRepository.save(task));
     }
@@ -134,5 +135,20 @@ public class TaskController {
 
         return ResponseEntity.ok()
                 .body(new ApiResponse(true, "Task deleted successfully"));
+    }
+
+    @PatchMapping("/tasks/{taskId}/finish")
+    @Transactional
+    public Task finishTask(@CurrentUser UserPrincipal userPrincipal, @PathVariable long taskId) {
+        final Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task", "taskId", taskId));
+
+        final User user = userService.getUserFromPrincipal(userPrincipal);
+        final Project project = task.getStep().getChapter().getProject();
+        if (!project.isShared() && !projectService.userHasRequiredRole(project, user, MemberRole.CONTRIBUTOR)) {
+            throw new ResourceAccessForbiddenException("Task", String.format("user should at least have the %s role to finish this task", MemberRole.CONTRIBUTOR));
+        }
+
+        return taskService.updateTaskStatus(task, true);
     }
 }

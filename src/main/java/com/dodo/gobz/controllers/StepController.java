@@ -7,7 +7,7 @@ import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.Step;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import com.dodo.gobz.payloads.dto.StepDto;
 import com.dodo.gobz.payloads.requests.StepCreationRequest;
 import com.dodo.gobz.payloads.requests.StepUpdateRequest;
@@ -59,7 +59,7 @@ public class StepController {
             throw new ResourceAccessForbiddenException("Step", String.format("user should at least have the %s role to read this step", MemberRole.VIEWER));
         }
 
-        return stepMapper.mapToDto(step);
+        return stepMapper.mapToDto(step, true);
     }
 
     @GetMapping("/chapters/{chapterId}/steps")
@@ -75,7 +75,7 @@ public class StepController {
 
         return chapter.getSteps()
                 .stream()
-                .map(stepMapper::mapToDto)
+                .map(step -> stepMapper.mapToDto(step, true))
                 .collect(Collectors.toList());
     }
 
