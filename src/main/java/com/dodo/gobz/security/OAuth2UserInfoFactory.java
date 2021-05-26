@@ -1,7 +1,7 @@
 package com.dodo.gobz.security;
 
 import com.dodo.gobz.exceptions.OAuth2AuthenticationProcessingException;
-import com.dodo.gobz.models.common.AuthProvider;
+import com.dodo.gobz.models.enums.AuthProvider;
 
 import java.util.Map;
 

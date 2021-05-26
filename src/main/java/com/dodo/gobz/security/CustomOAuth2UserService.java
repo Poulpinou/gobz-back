@@ -2,7 +2,7 @@ package com.dodo.gobz.security;
 
 import com.dodo.gobz.exceptions.OAuth2AuthenticationProcessingException;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.AuthProvider;
+import com.dodo.gobz.models.enums.AuthProvider;
 import com.dodo.gobz.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

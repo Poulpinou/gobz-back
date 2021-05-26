@@ -1,4 +1,4 @@
-package com.dodo.gobz.models.common;
+package com.dodo.gobz.models.enums;
 
 public enum AuthProvider {
     local,

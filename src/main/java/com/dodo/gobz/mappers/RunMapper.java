@@ -3,6 +3,7 @@ package com.dodo.gobz.mappers;
 import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.Run;
+import com.dodo.gobz.models.RunTask;
 import com.dodo.gobz.models.Step;
 import com.dodo.gobz.payloads.dto.RunDto;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RunMapper {
 
-    private final ChapterMapper chapterMapper;
     private final StepMapper stepMapper;
     private final TaskMapper taskMapper;
     private final ProjectMapper projectMapper;
+    private final ProjectMemberMapper projectMemberMapper;
 
     public RunDto mapToDto(Run run) {
 
@@ -28,13 +29,14 @@ public class RunMapper {
         return RunDto.builder()
                 .id(run.getId())
                 .project(projectMapper.mapToDto(project))
-                .chapter(chapterMapper.mapToDto(chapter))
                 .step(stepMapper.mapToDto(step))
                 .tasks(run.getTasks()
                         .stream()
+                        .map(RunTask::getTask)
                         .map(taskMapper::mapToDto)
                         .collect(Collectors.toList())
                 )
+                .owner(projectMemberMapper.mapToDto(run.getMember()))
                 .status(run.getStatus())
                 .hasLimitDate(run.hasLimitDate())
                 .limitDate(run.getLimitDate())

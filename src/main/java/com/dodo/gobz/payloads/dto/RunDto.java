@@ -1,6 +1,6 @@
 package com.dodo.gobz.payloads.dto;
 
-import com.dodo.gobz.models.common.RunStatus;
+import com.dodo.gobz.models.enums.RunStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class RunDto {
     private long id;
     private StepDto step;
-    private ChapterDto chapter;
     private ProjectDto project;
+    private ProjectMemberDto owner;
     private List<TaskDto> tasks;
     private RunStatus status;
     private boolean hasLimitDate;

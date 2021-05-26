@@ -7,7 +7,7 @@ import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.Step;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import com.dodo.gobz.payloads.dto.StepDto;
 import com.dodo.gobz.payloads.requests.StepCreationRequest;
 import com.dodo.gobz.payloads.requests.StepUpdateRequest;

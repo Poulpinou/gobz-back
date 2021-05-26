@@ -2,7 +2,7 @@ package com.dodo.gobz.controllers;
 
 import com.dodo.gobz.exceptions.BadRequestException;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.AuthProvider;
+import com.dodo.gobz.models.enums.AuthProvider;
 import com.dodo.gobz.payloads.requests.LoginRequest;
 import com.dodo.gobz.payloads.requests.SignUpRequest;
 import com.dodo.gobz.payloads.responses.ApiResponse;

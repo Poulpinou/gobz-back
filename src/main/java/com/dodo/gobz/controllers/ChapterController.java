@@ -6,7 +6,7 @@ import com.dodo.gobz.mappers.ChapterMapper;
 import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import com.dodo.gobz.payloads.dto.ChapterDto;
 import com.dodo.gobz.payloads.requests.ChapterCreationRequest;
 import com.dodo.gobz.payloads.requests.ChapterUpdateRequest;

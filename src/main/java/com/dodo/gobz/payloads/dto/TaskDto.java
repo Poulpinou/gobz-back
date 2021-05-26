@@ -1,7 +1,8 @@
 package com.dodo.gobz.payloads.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class TaskDto {
@@ -9,6 +10,7 @@ public class TaskDto {
 
     private String text;
 
-    @JsonProperty("isDone")
     private boolean isDone;
+
+    private List<ProjectMemberDto> workers;
 }

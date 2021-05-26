@@ -1,6 +1,6 @@
 package com.dodo.gobz.payloads.dto;
 
-import com.dodo.gobz.models.common.MemberRole;
+import com.dodo.gobz.models.enums.MemberRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

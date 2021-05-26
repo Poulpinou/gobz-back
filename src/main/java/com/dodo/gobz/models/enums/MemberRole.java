@@ -1,4 +1,4 @@
-package com.dodo.gobz.models.common;
+package com.dodo.gobz.models.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

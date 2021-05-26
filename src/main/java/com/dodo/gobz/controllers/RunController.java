@@ -1,13 +1,10 @@
 package com.dodo.gobz.controllers;
 
-import com.dodo.gobz.exceptions.BadRequestException;
 import com.dodo.gobz.exceptions.ResourceNotFoundException;
 import com.dodo.gobz.mappers.RunMapper;
 import com.dodo.gobz.models.Run;
 import com.dodo.gobz.models.Step;
-import com.dodo.gobz.models.Task;
 import com.dodo.gobz.models.User;
-import com.dodo.gobz.models.common.RunStatus;
 import com.dodo.gobz.payloads.dto.RunDto;
 import com.dodo.gobz.payloads.requests.RunCreationRequest;
 import com.dodo.gobz.repositories.RunRepository;
@@ -26,9 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -61,34 +55,8 @@ public class RunController {
         final Step step = stepRepository.findById(request.getStepId())
                 .orElseThrow(() -> new ResourceNotFoundException("Step", "stepId", request.getStepId()));
 
-        final List<Task> tasks = step.getTasks()
-                .stream()
-                .filter(task -> request.getTaskIds().contains(task.getId()))
-                .collect(Collectors.toList());
+        final Run run = runService.createRunFromRequest(user, step, request);
 
-        if (tasks.isEmpty()) {
-            throw new BadRequestException("None of provided tasks exist int the step");
-        }
-
-        final LocalDate limitDate;
-        if (request.getLimitDate() != null) {
-            limitDate = request.getLimitDate();
-
-            if (limitDate.isBefore(LocalDate.now())) {
-                throw new BadRequestException("Limit date should be after today's date");
-            }
-        } else {
-            limitDate = null;
-        }
-
-        final Run run = Run.builder()
-                .user(user)
-                .step(step)
-                .tasks(tasks)
-                .status(RunStatus.ACTIVE)
-                .limitDate(limitDate)
-                .build();
-
-        return runMapper.mapToDto(runRepository.save(run));
+        return runMapper.mapToDto(run);
     }
 }
