@@ -11,12 +11,20 @@ import java.util.List;
 @Builder
 public class RunDto {
     private long id;
+
     private StepDto step;
+
     private ProjectDto project;
+
     private ProjectMemberDto owner;
-    private List<TaskDto> tasks;
+
+    private List<RunTaskDto> tasks;
+
     private RunStatus status;
+
     private boolean hasLimitDate;
+
     private LocalDate limitDate;
+
     private double completion;
 }

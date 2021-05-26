@@ -11,8 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectMemberDto {
+
     private long id;
+
     private String name;
+
     private String imageUrl;
+
     private MemberRole role;
 }

@@ -13,6 +13,7 @@ public class AppConfig {
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
     private final Cors cors = new Cors();
+    private final Run run = new Run();
 
     @Getter
     @Setter
@@ -41,5 +42,11 @@ public class AppConfig {
     public static class Cors {
         private String[] allowedOrigins;
         private int maxAgeInSec;
+    }
+
+    @Getter
+    @Setter
+    public static class Run {
+        private Integer maxActiveAmount;
     }
 }

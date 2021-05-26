@@ -33,3 +33,6 @@ app:
     allowedOrigins:
       - http://localhost:3000
     maxAgeInSec: 3600
+
+  run:
+    maxActiveAmount: 5

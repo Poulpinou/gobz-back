@@ -61,7 +61,7 @@ public class TaskController {
             throw new ResourceAccessForbiddenException("Task", String.format("user should at least have the %s role to read this task", MemberRole.VIEWER));
         }
 
-        return taskMapper.mapToDto(task);
+        return taskMapper.mapToDto(task, true);
     }
 
     @GetMapping("/steps/{stepId}/tasks")
@@ -77,7 +77,7 @@ public class TaskController {
 
         return step.getTasks()
                 .stream()
-                .map(taskMapper::mapToDto)
+                .map(task -> taskMapper.mapToDto(task, true))
                 .collect(Collectors.toList());
     }
 

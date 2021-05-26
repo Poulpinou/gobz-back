@@ -1,5 +1,6 @@
 package com.dodo.gobz.payloads.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.List;
@@ -12,5 +13,6 @@ public class TaskDto {
 
     private boolean isDone;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ProjectMemberDto> workers;
 }

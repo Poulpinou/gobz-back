@@ -3,9 +3,9 @@ package com.dodo.gobz.mappers;
 import com.dodo.gobz.models.Chapter;
 import com.dodo.gobz.models.Project;
 import com.dodo.gobz.models.Run;
-import com.dodo.gobz.models.RunTask;
 import com.dodo.gobz.models.Step;
 import com.dodo.gobz.payloads.dto.RunDto;
+import com.dodo.gobz.payloads.dto.RunTaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class RunMapper {
 
     private final StepMapper stepMapper;
-    private final TaskMapper taskMapper;
     private final ProjectMapper projectMapper;
     private final ProjectMemberMapper projectMemberMapper;
 
@@ -32,8 +31,12 @@ public class RunMapper {
                 .step(stepMapper.mapToDto(step))
                 .tasks(run.getTasks()
                         .stream()
-                        .map(RunTask::getTask)
-                        .map(taskMapper::mapToDto)
+                        .map(runTask -> RunTaskDto.builder()
+                                .id(runTask.getTask().getId())
+                                .text(runTask.getTask().getText())
+                                .isDone(runTask.getTask().isDone())
+                                .isAbandoned(runTask.isAbandoned())
+                                .build())
                         .collect(Collectors.toList())
                 )
                 .owner(projectMemberMapper.mapToDto(run.getMember()))

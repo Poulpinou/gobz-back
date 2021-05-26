@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "app.run.maxActiveAmount",
+      "type": "java.lang.Integer",
+      "description": "The max amount of active runs per user."
+  }
+] }
