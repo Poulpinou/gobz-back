@@ -70,18 +70,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .cors()
                 .and()
+
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
             .csrf()
                 .disable()
-                .formLogin()
+
+            .formLogin()
                 .disable()
-                .httpBasic()
+
+            .httpBasic()
                 .disable()
-                .exceptionHandling()
+
+            .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .and()
+
             .authorizeRequests()
                 .antMatchers("/",
                         "/error",
@@ -92,24 +98,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js")
+                        "/**/*.js"
+                )
                 .permitAll()
+
+                // Auth
                 .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()
+
+                // Swagger
+                .antMatchers( "/v2/api-docs",
+                        "/configuration/**",
+                        "/swagger-resources/**",
+                        "/webjars/**",
+                        "/api-docs/**",
+                        "/swagger-ui/**")
+                .permitAll()
+
                 .anyRequest()
                 .authenticated()
                 .and()
+
             .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
                 .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                 .and()
+
             .redirectionEndpoint()
                 .baseUri("/oauth2/callback/*")
                 .and()
+
             .userInfoEndpoint()
                 .userService(customOAuth2UserService)
                 .and()
+
+            // Handlers
             .successHandler(oAuth2AuthenticationSuccessHandler)
             .failureHandler(oAuth2AuthenticationFailureHandler);
         //@formatter:on

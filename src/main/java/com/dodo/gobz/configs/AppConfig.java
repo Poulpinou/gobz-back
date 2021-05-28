@@ -1,6 +1,7 @@
 package com.dodo.gobz.configs;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -9,7 +10,12 @@ import java.util.List;
 
 @ConfigurationProperties(prefix = "app")
 @Getter
+@Setter
+@RequiredArgsConstructor
 public class AppConfig {
+    private String version;
+    private String name;
+
     private final Auth auth = new Auth();
     private final OAuth2 oauth2 = new OAuth2();
     private final Cors cors = new Cors();

@@ -3,7 +3,6 @@ package com.dodo.gobz.models;
 import com.dodo.gobz.models.audits.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
