@@ -12,7 +12,7 @@
     <groupId>com.dodo</groupId>
     <artifactId>gobz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gobz-api</name>
+    <name>Gobz Api</name>
     <description>Backend for Gobz Application</description>
 
     <properties>
@@ -92,6 +92,13 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.3.5</version>
+        </dependency>
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
         </dependency>
     </dependencies>
 

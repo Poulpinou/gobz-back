@@ -73,7 +73,7 @@ public class Run extends DateAuditable implements ProjectElement, CompletableEle
         return step.getProject();
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return status == RunStatus.ACTIVE || status == RunStatus.LATE;
     }
 }

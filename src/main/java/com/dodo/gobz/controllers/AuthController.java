@@ -9,6 +9,7 @@ import com.dodo.gobz.payloads.responses.ApiResponse;
 import com.dodo.gobz.payloads.responses.AuthResponse;
 import com.dodo.gobz.repositories.UserRepository;
 import com.dodo.gobz.security.TokenProvider;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,9 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Api(
+        tags = "Auth"
+)
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;

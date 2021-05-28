@@ -4,5 +4,16 @@
       "name": "app.run.maxActiveAmount",
       "type": "java.lang.Integer",
       "description": "The max amount of active runs per user."
-  }
-] }
+    },
+    {
+      "name": "app.version",
+      "type": "java.lang.String",
+      "description": "The current version of the project."
+    },
+    {
+      "name": "app.name",
+      "type": "java.lang.String",
+      "description": "The name of the application."
+    }
+  ]
+}

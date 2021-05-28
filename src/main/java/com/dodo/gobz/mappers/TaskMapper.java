@@ -20,14 +20,14 @@ public class TaskMapper {
 
     private final ProjectMemberMapper projectMemberMapper;
 
-    public TaskDto mapToDto(Task task){
+    public TaskDto mapToDto(Task task) {
         return mapToDto(task, false);
     }
 
     public TaskDto mapToDto(Task task, boolean withWorkers) {
         final TaskDto dto = mapper.map(task, TaskDto.class);
 
-        if(withWorkers){
+        if (withWorkers) {
             final List<ProjectMemberDto> workers = task.getRuns()
                     .stream()
                     .map(RunTask::getRun)

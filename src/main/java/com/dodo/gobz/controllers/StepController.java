@@ -18,6 +18,7 @@ import com.dodo.gobz.security.CurrentUser;
 import com.dodo.gobz.security.UserPrincipal;
 import com.dodo.gobz.services.ProjectService;
 import com.dodo.gobz.services.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,6 +39,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('USER')")
+@Api(
+        tags = "Steps"
+)
 public class StepController {
 
     private final ProjectService projectService;

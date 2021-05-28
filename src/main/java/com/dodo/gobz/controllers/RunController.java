@@ -15,9 +15,9 @@ import com.dodo.gobz.repositories.RunRepository;
 import com.dodo.gobz.repositories.StepRepository;
 import com.dodo.gobz.security.CurrentUser;
 import com.dodo.gobz.security.UserPrincipal;
-import com.dodo.gobz.services.ProjectService;
 import com.dodo.gobz.services.RunService;
 import com.dodo.gobz.services.UserService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,12 +36,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('USER')")
+@Api(
+        tags = "Runs"
+)
 public class RunController {
 
     private final AppConfig appConfig;
 
     private final UserService userService;
-    private final ProjectService projectService;
     private final RunService runService;
 
     private final RunRepository runRepository;
@@ -69,7 +71,7 @@ public class RunController {
     @PostMapping("/runs")
     @Transactional
     public RunDto createRun(@CurrentUser UserPrincipal userPrincipal, @Valid @RequestBody RunCreationRequest request) {
-        final int activeRunsCount = runRepository.countRunsByActiveIsTrueAndMemberUserId(userPrincipal.getId());
+        final int activeRunsCount = runRepository.countByMemberUserIdAndStatusIn(userPrincipal.getId(), RunStatus.ACTIVE, RunStatus.LATE);
         if (activeRunsCount >= appConfig.getRun().getMaxActiveAmount()) {
             throw new BadRequestException("Can't create a new run: max active run amount has been reached");
         }
