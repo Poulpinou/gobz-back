@@ -32,7 +32,7 @@ spring:
               - email
               - profile
 app:
-  name: @project.name@
+  name: Gobz Api
   version: @project.version@
 
   auth:

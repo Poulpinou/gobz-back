@@ -12,7 +12,7 @@
     <groupId>com.dodo</groupId>
     <artifactId>gobz</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Gobz Api</name>
+    <name>gobz-api</name>
     <description>Backend for Gobz Application</description>
 
     <properties>
