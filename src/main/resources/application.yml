@@ -3,14 +3,23 @@ spring:
     url: ${DB_URL:jdbc:mysql://localhost:3306/gobz?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.jdbc.Driver
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  flyway:
+    enabled: true
+    clean-on-validation-error: false # /!\ Enabling this will erase database content on error => disable it in prod!
+    locations: classpath:/db/migrations
+    placeholders:
+      defaultPassword: $2a$10$tdJKmGstUrF2CdmjOcryeOMoFTXK4rx1nc4fp1rzEfl8n09kbzSaq # => "test"
+
   security:
     oauth2:
       client:
@@ -40,3 +49,21 @@ app:
 
   run:
     maxActiveAmount: 5
+
+---
+# This profile generates a sql file with sql sent by hibernate
+spring:
+  config:
+    activate:
+      on-profile: generatesql
+  flyway:
+    enabled: false
+  jpa:
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            create-source: metadata
+            scripts:
+              action: create
+              create-target: src/main/resources/db/ddl_jpa_creation.sql
