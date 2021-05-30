@@ -1,5 +1,6 @@
 package com.dodo.gobz.services;
 
+import com.dodo.gobz.configs.AppConfig;
 import com.dodo.gobz.exceptions.BadRequestException;
 import com.dodo.gobz.models.ProjectMember;
 import com.dodo.gobz.models.Run;
@@ -22,14 +23,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RunService {
 
+    private final AppConfig appConfig;
+
     private final ProjectService projectService;
 
     private final RunRepository runRepository;
 
+    @Transactional
     public Run checkRunStatus(Run run) {
         return checkRunStatus(run, true);
     }
 
+    @Transactional
     public Run checkRunStatus(Run run, boolean saveIfStatusChanged) {
         RunStatus status = run.getStatus();
 
@@ -49,7 +54,7 @@ public class RunService {
             final LocalDate now = LocalDate.now();
             final LocalDate limitDate = run.hasLimitDate()
                     ? run.getLimitDate()
-                    : run.getCreatedAt().plusMonths(6).toLocalDate();
+                    : run.getCreatedAt().plusDays(appConfig.getRun().getLateAfterDayAmount()).toLocalDate();
 
             if (now.isAfter(limitDate)) {
                 status = RunStatus.LATE;

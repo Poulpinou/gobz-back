@@ -54,5 +54,6 @@ public class AppConfig {
     @Setter
     public static class Run {
         private Integer maxActiveAmount;
+        private Integer lateAfterDayAmount;
     }
 }
